@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:components="com.javierjulio.components.*" 
+		xmlns:supportClasses="com.javierjulio.supportClasses.*" 
+		alpha.disabled="0.5">
+	
+	<fx:Metadata>
+		/**
+		 * @copy spark.skins.spark.ApplicationSkin#hostComponent
+		 */
+		[HostComponent("spark.components.TabBar")]
+	</fx:Metadata> 
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="disabled" />
+	</s:states>
+	
+	<!--- @copy spark.components.SkinnableDataContainer#dataGroup -->
+	<s:DataGroup id="dataGroup" top="0" bottom="0" left="0">
+		<s:layout>
+			<s:ButtonBarHorizontalLayout gap="-1" />
+		</s:layout>
+		<s:itemRenderer>
+			<fx:Component>
+				<components:Tab skinClass="com.javierjulio.skins.TabSkin" />
+			</fx:Component>
+		</s:itemRenderer>
+	</s:DataGroup>
+	
+	<!-- bottom border -->
+	<s:Rect left="0" right="0" bottom="0" height="1">
+		<s:fill>
+			<s:SolidColor color="#696969" />
+		</s:fill>
+	</s:Rect>
+	
+</s:Skin>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	xmlns:views="com.javierjulio.contactmanager.view.components.*" 
+	xmlns:components="com.javierjulio.components.*" 
+	height="100%" width="100%" 
+	applicationComplete="applicationCompleteHandler();">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.javierjulio.contactmanager.ApplicationFacade;
+			
+			import mx.controls.ProgressBar;
+			import mx.utils.UIDUtil;
+			
+			/**
+			 * @private
+			 * The UID used to create a multiton instance of ApplicationFacade for an 
+			 * instance of this app, so this cannot be a static value.
+			 */
+			private const APP_UID:String = UIDUtil.createUID();
+			
+			/**
+			 * @private
+			 * Storage for the multiton ApplicationFacade instance retrieved by the 
+			 * app instance UID (multiton key). This is critical since multiple 
+			 * modules can be loaded by this application that use PureMVC and we 
+			 * don't want them overriding one another so we need a unique multiton 
+			 * (managed singleton instance) instance for each including the application.
+			 */
+			private var facade:ApplicationFacade = ApplicationFacade.getInstance(APP_UID);
+			
+			[SkinPart(required="false", type="mx.core.IVisualElement")]
+			
+			/**
+			 * A skin part that defines the progress bar in the application status bar.
+			 * 
+			 * @default null
+			 */
+			public var statusProgressBar:ProgressBar;
+			
+			/**
+			 * Displays the indeterminate status progress bar.
+			 * 
+			 * @param show If <code>true</code> displays the progress bar.
+			 */
+			public function indicateProgess(show:Boolean=true):void 
+			{
+				statusProgressBar.visible = show;
+			}
+			
+			/**
+			 * On creation complete we perform start up and pass along this 
+			 * Application instance.
+			 */
+			protected function applicationCompleteHandler():void 
+			{
+				facade.startUp(this);
+				
+				// center the main application window
+				var screenBounds:Rectangle = Screen.mainScreen.bounds;
+				nativeWindow.x = (screenBounds.width - nativeWindow.width) / 2;
+				nativeWindow.y = (screenBounds.height - nativeWindow.height) / 2;
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Style source="styles.css" />
+	
+	<fx:Declarations>
+		
+		<s:TraceTarget filters="com.javierjulio.contactmanager.*" 
+			includeCategory="true" includeDate="true" includeLevel="true" includeTime="true" />
+		
+	</fx:Declarations>
+	
+	<views:AppControlBar id="appControlBar" width="100%" />
+	
+	<components:SuperTabBar dataProvider="{contactProfileStack}" requireSelection="true" 
+							top="55" left="8" right="330" height="30" />
+	
+	<views:ContactProfileStack id="contactProfileStack" top="85" bottom="8" left="8" right="330" />
+	
+	<views:ContactList id="contactList" top="70" bottom="8" right="8" height="100%" width="300" />
+	
+</s:WindowedApplication>

@@ -1,0 +1,23 @@
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace components "com.javierjulio.components.*";
+@namespace views "com.javierjulio.contactmanager.view.components.*";
+
+global 
+{
+	color: #333333;
+	font-size: 12;
+}
+
+s|WindowedApplication
+{
+	skin-class: ClassReference("com.javierjulio.contactmanager.view.skins.ContactManagerSkin");
+}
+views|AppControlBar 
+{
+	skin-class: ClassReference("com.javierjulio.contactmanager.view.skins.AppControlBarSkin");
+}
+components|SuperTabBar 
+{
+	skin-class: ClassReference("com.javierjulio.skins.TabBarSkin");
+}

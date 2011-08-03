@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	label="{(contact.id > 0) ? contact.fullName : 'New Contact'}" 
+	width="100%" height="100%">
+	
+	<s:layout>
+		<s:VerticalLayout />
+	</s:layout>
+	
+	<fx:Metadata>
+		[Event(name="delete", type="com.javierjulio.contactmanager.view.events.ContactEvent")]
+		[Event(name="save", type="com.javierjulio.contactmanager.view.events.ContactEvent")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import flash.events.TimerEvent;
+			import flash.utils.Timer;
+			
+			import com.javierjulio.contactmanager.model.vo.ContactVO;
+			import com.javierjulio.contactmanager.view.events.ContactEvent;
+			
+			/**
+			 * @private
+			 */
+			private var statusTimer:Timer;
+			
+			[Bindable]
+			public var contact:ContactVO;
+			
+			/**
+			 * Sets a contact saved success message on the Label 
+			 * component found below the form control bar.
+			 * 
+			 * @param message The success message to be displayed.
+			 */
+			public function saved(message:String="Contact saved successfully!"):void 
+			{
+				status.text = message;
+				
+				saveAction.enabled = true;
+				saveAction.label = "Save";
+				
+				if (!statusTimer) 
+				{
+					statusTimer = new Timer(3500);
+				}
+				
+				if (!statusTimer.hasEventListener(TimerEvent.TIMER)) 
+				{
+					statusTimer.addEventListener(TimerEvent.TIMER, statusTimerHandler);
+				}
+				
+				statusTimer.start();
+			}
+			
+			/**
+			 * @private
+			 */
+			private function save():void 
+			{
+				saveAction.enabled = false;
+				saveAction.label = "Saving...";
+				
+				contact.firstName = firstName.text;
+				contact.lastName = lastName.text;
+				contact.email = email.text;
+				contact.phone = phone.text;
+				contact.address = address.text;
+				contact.city = city.text;
+				contact.state = state.text;
+				contact.zip = zip.text;
+				
+				dispatchEvent(new ContactEvent(ContactEvent.SAVE, contact, true));
+			}
+			
+			/**
+			 * @private
+			 */
+			private function remove():void 
+			{
+				dispatchEvent(new ContactEvent(ContactEvent.DELETE, contact, true));
+			}
+			
+			/**
+			 * @private
+			 */
+			private function statusTimerHandler(event:TimerEvent):void 
+			{
+				statusTimer.removeEventListener(TimerEvent.TIMER, statusTimerHandler);
+				statusTimer.stop();
+				statusFadeOut.play();
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+		<s:Fade id="statusFadeOut" alphaFrom="1" alphaTo="0" duration="600" target="{status}" />
+		
+	</fx:Declarations>
+	
+	<mx:Form>
+		
+		<mx:FormItem label="Id">
+			<s:TextInput text="{contact.id}" enabled="false" width="180" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="First Name">
+			<s:TextInput id="firstName" text="{contact.firstName}" width="180" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Last Name">
+			<s:TextInput id="lastName" text="{contact.lastName}" width="180" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Email">
+			<s:TextInput id="email" text="{contact.email}" width="180" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Phone">
+			<s:TextInput id="phone" text="{contact.phone}" width="180" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Address">
+			<s:TextInput id="address" text="{contact.address}" width="180" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="City">
+			<s:TextInput id="city" text="{contact.city}" width="180" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="State">
+			<s:TextInput id="state" text="{contact.state}" width="180" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Zip">
+			<s:TextInput id="zip" text="{contact.zip}" width="180" />
+		</mx:FormItem>
+		
+		<mx:FormItem direction="horizontal">
+			<s:Button id="saveAction" bottom="26" left="12" 
+				label="Save" click="save();" />
+			<s:Button id="deleteAction" bottom="26" left="90" 
+				label="Delete" enabled="{(contact.id >= 1)}" click="remove();" />
+		</mx:FormItem>
+		
+	</mx:Form>
+	
+	<s:Label id="status" fontWeight="bold" paddingLeft="90" />
+	
+</s:NavigatorContent>

@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>PureMVC Presentation Notes</title>
+		<style type="text/css">
+			body {font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;}
+		</style>
+	</head>
+	<body>
+	
+	<div id="content">
+		<h2>Model - Proxies and Data Objects</h2>
+		
+		<ul>
+		<li>Data objects can be simple data holders
+			<ul>
+				<li>e.g. ArrayCollection, XMLListCollection, Value Object, etc.</li>
+			</ul>
+		</li>
+		<li>Proxies control access to Data Objects by exposing an API
+			<ul>
+				<li>A UserProxy might have methods like saveUser(), deleteUser(), loadUsers()</li>
+			</ul>
+		</li>
+		<li>Proxies may interact with remote services</li>
+		<li>Why have service interaction in the Model?
+			<ul>
+				<li>Encapsulation and portability</li>
+				<li>No explosion of classes for every action (e.g. Commands)</li>
+			</ul>
+		</li>
+		<li>Proxies may broadcast but do not listen for notifications
+			<ul>
+				<li>No dependencies on view or controller layer</li>
+				<li>Portability (desktop, mobile, modules)</li>
+			</ul>
+		</li>
+		</ul>
+		
+		<h2>View - Mediators and View Components</h2>
+		
+		<ul>
+		<li>View Component is any UI component
+			<ul>
+				<li>e.g. DataGrid, List, or any custom component</li>
+			</ul>
+		</li>
+		<li>Mediators look after View Components
+			<ul>
+				<li>Listen for dispatched events</li>
+				<li>Inspect component properties and methods</li>
+			</ul>
+		</li>
+		<li>Mediators interact with system on behalf of View Component
+			<ul>
+				<li>View Component has no knowledge of the framework</li>
+				<li>View Component should encapsulate its own behavior
+					<ul>
+						<li>e.g. form validation, transition management, subcomponent visibility</li>
+					</ul>
+				</li>
+			</ul></li>
+		<li>Mediators may broadcast and listen for notifications</li>
+		</ul>
+		
+		<h2>Controller - Commands</h2>
+		
+		<ul>
+		<li>Contain business logic of the application</li>
+		<li>Stateless and created only when needed</li>
+		<li>Coordinate complex activities like startup and shutdown</li>
+		<li>Useful for actions that can be triggered from multiple places</li>
+		<li>Expect to write few commands!
+			<ul>
+				<li>Mediator performs critical decoupling of View Component from Model</li>
+				<li>Service interaction is moved to the model</li>
+			</ul>
+		</li>
+		<li>Commands may broadcast and are triggered by notifications</li>
+		</ul>
+		
+		<h2>Facade</h2>
+		
+		<ul>
+		<li>Simple API for retrieval, registration and removal of core actors</li>
+		<li>Hides the Model, View and Controller singletons</li>
+		<li>Any Proxy, Mediator or Command has access to Facade
+			<ul>
+				<li>Via an inherited "facade" property</li>
+			</ul>
+		</li>
+		<li>Create a concrete Facade called ApplicationFacade
+			<ul>
+				<li>Handles registration of commands</li>
+				<li>Defines application-level notification constants</li>
+			</ul>
+		</li>
+		</ul>
+	</div>
+	
+	</body>
+</html>
